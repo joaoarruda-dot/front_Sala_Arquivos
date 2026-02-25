@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Maida Sala De Arquivos</title>
+    <link rel="icon" type="image/x-icon" href="img/maidalog.png">
+    <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+    <div class="card login-card">
+        <div class="logo-area">
+                <img src="/img/maidalog.png" alt="Logo Maida" class="logo-img">
+                <div class="logo-text">
+                    <span class="brand-pink">i</span><span class="brand-blue">Maida</span>
+                </div>
+            </div>
+        <p style="margin-bottom: 30px; color: var(--text-gray);">Acesse o Sistema</p>
+        
+        <form id="form-login">
+            <div class="form-group" style="text-align: left;">
+                <label>Login (E-mail, CPF ou Matrícula)</label>
+                <input type="text" id="identifier" required placeholder="Digite seu acesso...">
+            </div>
+            <div class="form-group" style="text-align: left;">
+                <label>Senha</label>
+                <input type="password" id="senha" required placeholder="********">
+            </div>
+            <button type="submit" class="btn-primary login-btn">Entrar</button>
+        </form>
+    </div>
+    <script src="/js/index.js"></script>
+</body>
+</html>

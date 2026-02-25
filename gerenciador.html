@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Sala De Arquivos</title>
+    <link rel="icon" type="image/x-icon" href="img/maidalog.png">
+    <link rel="stylesheet" href="/css/gerenciador.css">
+</head>
+
+<body>
+    <!-- Modal de Configurações -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content settings-modal">
+            <div class="modal-header">
+                <h3>
+            <i>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="4" y1="21" x2="4" y2="14"></line>
+                    <line x1="4" y1="10" x2="4" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12" y2="3"></line>
+                    <line x1="20" y1="21" x2="20" y2="16"></line>
+                    <line x1="20" y1="12" x2="20" y2="3"></line>
+                    <line x1="1" y1="14" x2="7" y2="14"></line>
+                    <line x1="9" y1="8" x2="15" y2="8"></line>
+                    <line x1="17" y1="16" x2="23" y2="16"></line>
+                </svg>
+            </i>
+                    Configurações
+                </h3>
+                <button class="close-btn" onclick="fecharModalConfiguracoes()">&times;</button>
+            </div>
+            
+            <div class="settings-tabs">
+                <button class="tab-btn active" onclick="mudarAba('profile')">
+                    <i>
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </i> Perfil
+                </button>
+                <button class="tab-btn" onclick="mudarAba('security')">
+                    <i>
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                </i> Segurança
+                </button>
+            </div>
+
+            <!-- Aba de Perfil -->
+            <div id="profileTab" class="tab-content active">
+                <div class="profile-header">
+                    <div class="profile-avatar-container">
+                        <div class="profile-avatar" id="profileAvatar">
+                            <span>JS</span>
+                        </div>
+                        <div class="avatar-overlay" onclick="document.getElementById('avatarInput').click()">
+                            <i>📷</i>
+                            <span>Trocar foto</span>
+                        </div>
+                    </div>
+                    <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+                    <h4>João Silva</h4>
+                    <p>joao.silva@arquivo.com</p>
+                </div>
+
+                <form id="profileForm">
+                    <div class="form-group">
+                        <label>Nome completo</label>
+                        <input type="text" value="João Silva" placeholder="Seu nome completo">
+                    </div>
+
+                    <div class="form-group">
+                        <label>E-mail</label>
+                        <input type="email" value="joao.silva@arquivo.com" placeholder="seu@email.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Cargo</label>
+                        <input type="text" value="Administrador" placeholder="Seu cargo">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Telefone</label>
+                        <input type="text" value="(11) 99999-9999" placeholder="(00) 00000-0000">
+                    </div>
+
+                    <button type="submit" class="btn-primary">Salvar Alterações</button>
+                </form>
+            </div>
+
+            <!-- Aba de Segurança -->
+            <div id="securityTab" class="tab-content">
+                <form id="passwordForm">
+                    <div class="form-group">
+                        <label>Senha atual</label>
+                        <input type="password" placeholder="••••••••" id="currentPassword">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nova senha</label>
+                        <input type="password" placeholder="••••••••" id="newPassword">
+                        <div class="password-strength" id="passwordStrength">
+                            <div class="strength-bar"></div>
+                            <div class="strength-bar"></div>
+                            <div class="strength-bar"></div>
+                        </div>
+                        <small class="password-hint">Mínimo 8 caracteres, com letras e números</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Confirmar nova senha</label>
+                        <input type="password" placeholder="••••••••" id="confirmPassword">
+                    </div>
+
+                    <div class="form-info" id="twoFactorInfo" style="display: none;">
+                        <p>Escaneie o QR Code com seu aplicativo autenticador:</p>
+                        <div class="qr-code-placeholder">
+                            <i>📱</i>
+                            <span>QR Code Simulado</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Alterar Senha</button>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="fecharModalConfiguracoes()">Cancelar</button>
+                <button class="btn-primary" onclick="salvarConfiguracoes()">Salvar Configurações</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="header-content">
+                <img src="/img/maidalog.png" alt="Logo" class="sidebar-logo-small">
+                <div class="header-text">
+                    <h3>Sala De Arquivos</h3>
+                    <p>Gestão de Processos</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="menu-item active" onclick="carregarConteudo('dashboard')">
+            <i>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="3" y1="9" x2="21" y2="9"></line>
+                    <line x1="9" y1="21" x2="9" y2="9"></line>
+                </svg>
+            </i>
+            <span>Dashboard</span>
+        </div>
+    
+        <div class="menu-item" onclick="carregarConteudo('processos')">
+            <i>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+            </i>
+            <span>Processos</span>
+        </div>
+    
+        <div class="menu-item" onclick="carregarConteudo('prestadores')">
+            <i>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </i>
+            <span>Prestadores</span>
+        </div>
+    
+        <div class="menu-item" onclick="carregarConteudo('partições')">
+            <i>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                </svg>
+            </i>
+            <span>Partições</span>
+        </div>
+    
+        <div class="menu-item" onclick="carregarConteudo('históricos')">
+            <i>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+            </i>
+            <span>Históricos</span>
+        </div>
+    
+        <div class="menu-item" onclick="carregarConteudo('configurações')">
+            <i>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="4" y1="21" x2="4" y2="14"></line>
+                    <line x1="4" y1="10" x2="4" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12" y2="3"></line>
+                    <line x1="20" y1="21" x2="20" y2="16"></line>
+                    <line x1="20" y1="12" x2="20" y2="3"></line>
+                    <line x1="1" y1="14" x2="7" y2="14"></line>
+                    <line x1="9" y1="8" x2="15" y2="8"></line>
+                    <line x1="17" y1="16" x2="23" y2="16"></line>
+                </svg>
+            </i>
+            <span>Configurações</span>
+        </div>
+    
+        <div class="menu-item" style="margin-top: 50px;" onclick="logout()">
+            <i>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+            </i>
+            <span>Sair</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="top-bar">
+            <div class="search-box">
+                <input type="text" placeholder="Buscar processo por QR Code, código ou prestador...">
+                <button>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="user-info">
+                <span></span>
+                <div class="user-avatar">JS</div>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-value">1,234</span>
+                    <i>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="3" width="20" height="18" rx="2" ry="2"></rect>
+                            <line x1="8" y1="9" x2="16" y2="9"></line>
+                            <line x1="8" y1="13" x2="16" y2="13"></line>
+                            <line x1="8" y1="17" x2="12" y2="17"></line>
+                        </svg>
+                    </i>
+                </div>
+                <div class="stat-label">Total de Processos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-value">156</span>
+                    <i>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                        </svg>
+                    </i>
+                </div>
+                <div class="stat-label">Partições Ocupadas</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-value">45</span>
+                    <i>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 12v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5"></path>
+                            <line x1="7" y1="8" x2="12" y2="13"></line>
+                            <line x1="17" y1="8" x2="12" y2="13"></line>
+                            <line x1="12" y1="3" x2="12" y2="13"></line>
+                        </svg>
+                    </i>
+                </div>
+                <div class="stat-label">Processos Retirados</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-value">12</span>
+                    <i>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </i>
+                </div>
+                <div class="stat-label">Prestadores Ativos</div>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            <div class="quick-register">
+                <h3>
+                    <i>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M13 2L3 14h8l-2 8 10-12h-8l2-8z"></path>
+                        </svg>
+                    </i>
+                    Registro Rápido de Movimentação
+                </h3>
+                <form id="movementForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Código QR Code</label>
+                            <input type="text" placeholder="Leia ou digite o código" id="qrCode">
+                        </div>
+                        <div class="form-group">
+                            <label>Tipo</label>
+                            <select id="movementType">
+                                <option value="entrada">Entrada</option>
+                                <option value="saida">Saída</option>
+                                <option value="devolucao">Devolução</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Localização (Partição)</label>
+                        <input type="text" placeholder="Ex: A-127" id="locationInput" readonly>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Quem colocou</label>
+                            <select id="placedBy">
+                                <option value="1">João Silva</option>
+                                <option value="2">Maria Santos</option>
+                                <option value="3">Pedro Oliveira</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Quem retirou (se for saída)</label>
+                            <select id="removedBy">
+                                <option value="">Selecione</option>
+                                <option value="1">João Silva</option>
+                                <option value="2">Maria Santos</option>
+                                <option value="3">Pedro Oliveira</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Data/Hora Entrada</label>
+                            <input type="datetime-local" id="entryDate" value="2024-01-15T14:30">
+                        </div>
+                        <div class="form-group">
+                            <label>Data/Hora Saída</label>
+                            <input type="datetime-local" id="exitDate">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Registrar Movimentação</button>
+                </form>
+            </div>
+
+            <div class="room-map">
+                <h3>
+                    <i>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="3 6 12 2 21 6 21 18 12 22 3 18 3 6"></polygon>
+                            <line x1="12" y1="22" x2="12" y2="12"></line>
+                            <polyline points="9 10 12 12 15 10"></polyline>
+                        </svg>
+                    </i>
+                Mapa da Sala
+                </h3>
+    
+            <div class="corredor-selector">
+                <button class="corredor-btn active" onclick="mudarCorredor('1', event)">Corredor 1 (1-40)</button>
+                <button class="corredor-btn" onclick="mudarCorredor('2', event)">Corredor 2 (41-120)</button>
+                <button class="corredor-btn" onclick="mudarCorredor('3', event)">Corredor 3 (121-160)</button>
+            </div>
+    
+            <div class="corredor-indicator" id="corredorIndicator">Exibindo Corredor 1 - Partições 1 a 40</div>
+    
+            <div class="partitions-grid" id="partitionsGrid">
+            </div>
+    
+            <div class="map-legend">
+                <span>
+                    <span class="legend-color available"></span> Vazio
+                </span>
+                <span>
+                    <span class="legend-color occupied"></span> Ocupado
+                </span>
+            </div>
+        </div>
+        <div class="historico-movimentacao">
+            <h3>
+                <i>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                </i>
+                Últimas Movimentações
+            </h3>
+            <table class="moves-table">
+                <thead>
+                    <tr>
+                        <th>Data/Hora</th>
+                        <th>Processo</th>
+                        <th>Tipo</th>
+                        <th>Local</th>
+                        <th>Responsável</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelaHistoricoMov">
+                    <tr>
+                        <td>15/01/2024 14:30</td>
+                        <td>PROC-2024-001</td>
+                        <td><span class="badge entrada">Entrada</span></td>
+                        <td>A-127</td>
+                        <td>João Silva</td>
+                        <td>Na prateleira</td>
+                    </tr>
+                    <tr>
+                        <td>15/01/2024 11:20</td>
+                        <td>PROC-2024-045</td>
+                        <td><span class="badge saida">Saída</span></td>
+                        <td>B-089</td>
+                        <td>Maria Santos</td>
+                        <td>Retirado</td>
+                    </tr>
+                    <tr>
+                        <td>14/01/2024 16:45</td>
+                        <td>PROC-2024-032</td>
+                        <td><span class="badge devolucao">Devolução</span></td>
+                        <td>A-056</td>
+                        <td>Pedro Oliveira</td>
+                        <td>Na prateleira</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal de Seleção de Partição -->
+    <div class="modal" id="partitionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Selecionar Partição</h3>
+                <button class="close-btn" onclick="fecharModal()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="shelf-selector">
+                <button class="shelf-btn active" onclick="mudarEstanteModal('A', event)">Estante A (1-80)</button>
+                <button class="shelf-btn" onclick="mudarEstanteModal('B', event)">Estante B (81-160)</button>
+            </div>
+            <div class="shelf-indicator" id="modalShelfIndicator">Exibindo Estante A - Partições 1 a 80</div>
+            <div class="partitions-grid" id="modalPartitionsGrid">
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/gerenciador.js"></script>
+</body>
+</html>
