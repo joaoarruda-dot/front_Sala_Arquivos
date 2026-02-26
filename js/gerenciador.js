@@ -160,20 +160,11 @@ function carregarDashboard() {
                     <div class="form-row">
                         <div class="form-group">
                             <label>Quem colocou</label>
-                            <select id="placedBy">
-                                <option value="1">João Silva</option>
-                                <option value="2">Maria Santos</option>
-                                <option value="3">Pedro Oliveira</option>
-                            </select>
+                            <input type="text" placeholder="Insira quem colocou" id="placedBy">
                         </div>
                         <div class="form-group">
                             <label>Quem retirou (se for saída)</label>
-                            <select id="removedBy">
-                                <option value="">Selecione</option>
-                                <option value="1">João Silva</option>
-                                <option value="2">Maria Santos</option>
-                                <option value="3">Pedro Oliveira</option>
-                            </select>
+                            <input type="text" placeholder="Insira quem retirou" id="removedBy">
                         </div>
                     </div>
 
@@ -523,8 +514,8 @@ function carregarHistoricos() {
         <div class="filtros-box">
             <div class="form-row">
                 <div class="form-group">
-                    <label>Período</label>
-                    <input type="date" id="dataInicio"> até <input type="date" id="dataFim">
+                    <label>Data/Hora Entrada</label>
+                    <input type="date" id="dataInicio"> <label>Data/Hora Saída</label> <input type="date" id="dataFim">
                 </div>
                 <div class="form-group">
                     <label>Processo</label>
