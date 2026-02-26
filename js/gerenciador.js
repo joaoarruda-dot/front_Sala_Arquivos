@@ -165,9 +165,8 @@ function carregarDashboard() {
                         <div class="form-group">
                             <label>Quem retirou (se for saída)</label>
                             <input type="text" placeholder="Insira quem retirou" id="removedBy">
-                        </div>
+                        </div>  
                     </div>
-
                     <div class="form-row">
                         <div class="form-group">
                             <label>Data/Hora Entrada</label>
