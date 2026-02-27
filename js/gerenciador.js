@@ -28,9 +28,9 @@ function carregarConteudo(pagina) {
         case 'processos':
             carregarProcessos();
             break;
-        case 'prestadores':
-            carregarPrestadores();
-            break;
+        // case 'prestadores':
+        //     carregarPrestadores();
+        //     break;
         case 'partições':
             carregarParticoes();
             break;
@@ -377,77 +377,77 @@ function carregarProcessos() {
     `;
 }
 // ==================== CONTEÚDO DE PRESTADORES ====================
-function carregarPrestadores() {
-    const conteudoPrincipal = document.querySelector('.main-content');
-    conteudoPrincipal.innerHTML = `
-        <div class="page-header">
-            <h2>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="12" cy="7" r="4"></circle>
-                </svg>
-                Gerenciar Prestadores
-            </h2>
-        </div>
+// function carregarPrestadores() {
+//     const conteudoPrincipal = document.querySelector('.main-content');
+//     conteudoPrincipal.innerHTML = `
+//         <div class="page-header">
+//             <h2>
+//                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+//                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+//                     <circle cx="12" cy="7" r="4"></circle>
+//                 </svg>
+//                 Gerenciar Prestadores
+//             </h2>
+//         </div>
 
-        <div class="filtros-box">
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Buscar</label>
-                    <input type="text" placeholder="Buscar por nome, CNPJ ou email">
-                </div>
-                <div class="form-group">
-                    <label>Status</label>
-                    <select>
-                        <option>Todos</option>
-                        <option>Ativo</option>
-                        <option>Inativo</option>
-                    </select>
-                </div>
-            </div>
-        </div>
+//         <div class="filtros-box">
+//             <div class="form-row">
+//                 <div class="form-group">
+//                     <label>Buscar</label>
+//                     <input type="text" placeholder="Buscar por nome, CNPJ ou email">
+//                 </div>
+//                 <div class="form-group">
+//                     <label>Status</label>
+//                     <select>
+//                         <option>Todos</option>
+//                         <option>Ativo</option>
+//                         <option>Inativo</option>
+//                     </select>
+//                 </div>
+//             </div>
+//         </div>
 
-        <div class="tabela-container">
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th>CNPJ</th>
-                        <th>Telefone</th>
-                        <th>Email</th>
-                        <th>Status</th>
-                        <th>Processos</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Prestador A</td>
-                        <td>12.345.678/0001-90</td>
-                        <td>(11) 99999-9999</td>
-                        <td>contato@prestadora.com</td>
-                        <td><span class="badge entrada">Ativo</span></td>
-                        <td>45</td>
-                        <td>
-                            <button class="btn-icon" onclick="verPrestador('1')">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="12" cy="12" r="3"></circle>
-                                    <path d="M22 12c-2.667 4.667-6 7-10 7s-7.333-2.333-10-7c2.667-4.667 6-7 10-7s7.333 2.333 10 7z"></path>
-                                </svg>
-                            </button>
-                            <button class="btn-icon" onclick="editarPrestador('1')">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path>
-                                    <polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon>
-                                </svg>
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    `;
-}
+//         <div class="tabela-container">
+//             <table class="data-table">
+//                 <thead>
+//                     <tr>
+//                         <th>Nome</th>
+//                         <th>CNPJ</th>
+//                         <th>Telefone</th>
+//                         <th>Email</th>
+//                         <th>Status</th>
+//                         <th>Processos</th>
+//                         <th>Ações</th>
+//                     </tr>
+//                 </thead>
+//                 <tbody>
+//                     <tr>
+//                         <td>Prestador A</td>
+//                         <td>12.345.678/0001-90</td>
+//                         <td>(11) 99999-9999</td>
+//                         <td>contato@prestadora.com</td>
+//                         <td><span class="badge entrada">Ativo</span></td>
+//                         <td>45</td>
+//                         <td>
+//                             <button class="btn-icon" onclick="verPrestador('1')">
+//                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+//                                     <circle cx="12" cy="12" r="3"></circle>
+//                                     <path d="M22 12c-2.667 4.667-6 7-10 7s-7.333-2.333-10-7c2.667-4.667 6-7 10-7s7.333 2.333 10 7z"></path>
+//                                 </svg>
+//                             </button>
+//                             <button class="btn-icon" onclick="editarPrestador('1')">
+//                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+//                                     <path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path>
+//                                     <polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon>
+//                                 </svg>
+//                             </button>
+//                         </td>
+//                     </tr>
+//                 </tbody>
+//             </table>
+//         </div>
+//     `;
+// }
 // ==================== CONTEÚDO DE PARTIÇÕES ====================
 function carregarParticoes() {
     const conteudoPrincipal = document.querySelector('.main-content');
