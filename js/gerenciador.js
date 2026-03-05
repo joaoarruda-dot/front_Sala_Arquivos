@@ -6,6 +6,8 @@ let paginaAtual = 'dashboard';
 
 // ==================== FUNÇÕES DE NAVEGAÇÃO ====================
 function carregarConteudo(pagina) {
+    console.log('Carregando página:', pagina); 
+    
     const conteudoPrincipal = document.querySelector('.main-content');
     if (!conteudoPrincipal) return;
 
@@ -28,9 +30,6 @@ function carregarConteudo(pagina) {
         case 'processos':
             carregarProcessos();
             break;
-        // case 'prestadores':
-        //     carregarPrestadores();
-        //     break;
         case 'partições':
             carregarParticoes();
             break;
@@ -40,8 +39,11 @@ function carregarConteudo(pagina) {
         case 'configurações':
             carregarConfiguracoes();
             break;
+        default:
+            console.log('Página não encontrada:', pagina);
     }
 }
+
 // ==================== CONTEÚDO DO DASHBOARD ====================
 function carregarDashboard() {
     const conteudoPrincipal = document.querySelector('.main-content');
@@ -49,13 +51,7 @@ function carregarDashboard() {
         <!-- Barra Superior -->
         <div class="top-bar">
             <div class="search-box">
-                <input type="text" placeholder="Buscar processo por QR Code, código ou prestador...">
-                <button>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
-                </button>
+            
             </div>
             <div class="user-info">
                 <span>Bem-vindo, João Silva</span>
@@ -279,19 +275,33 @@ function carregarDashboard() {
 
     gerarParticoes('1');
 
-    document.getElementById('locationInput')?.addEventListener('click', abrirModal);
-    document.getElementById('movementForm')?.addEventListener('submit', registrarMovimentacao);
+    const locationInput = document.getElementById('locationInput');
+    if (locationInput) {
+        locationInput.addEventListener('click', abrirModal);
+    }
+
+    const movementForm = document.getElementById('movementForm');
+    if (movementForm) {
+        movementForm.addEventListener('submit', registrarMovimentacao);
+    }
 
     const tipoMovimento = document.getElementById('movementType');
     const quemRetirou = document.getElementById('removedBy');
     if (tipoMovimento && quemRetirou) {
-        tipoMovimento.addEventListener('change', function() {
-            quemRetirou.disabled = this.value !== 'saida';
-            if (this.value !== 'saida') quemRetirou.value = '';
+        tipoMovimento.replaceWith(tipoMovimento.cloneNode(true));
+        const novoTipoMovimento = document.getElementById('movementType');
+        const novoQuemRetirou = document.getElementById('removedBy');
+        
+        novoTipoMovimento.addEventListener('change', function() {
+            novoQuemRetirou.disabled = this.value !== 'saida';
+            if (this.value !== 'saida') {
+                novoQuemRetirou.value = '';
+            }
         });
-        quemRetirou.disabled = true;
+        novoQuemRetirou.disabled = true;
     }
 }
+
 // ==================== CONTEÚDO DE PROCESSOS ====================
 function carregarProcessos() {
     const conteudoPrincipal = document.querySelector('.main-content');
@@ -324,16 +334,8 @@ function carregarProcessos() {
                         <option>Extraviado</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label>Prestador</label>
-                    <select>
-                        <option>Todos</option>
-                        <option>Prestador A</option>
-                        <option>Prestador B</option>
-                    </select>
                 </div>
             </div>
-        </div>
 
         <div class="tabela-container">
             <table class="data-table">
@@ -358,15 +360,15 @@ function carregarProcessos() {
                         <td>C1-27</td>
                         <td>
                             <button class="btn-icon" onclick="verProcesso('PROC-2024-001')">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="12" cy="12" r="3"></circle>
-                                    <path d="M22 12c-2.667 4.667-6 7-10 7s-7.333-2.333-10-7c2.667-4.667 6-7 10-7s7.333 2.333 10 7z"></path>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M22 12C22 12 19 18 12 18C5 18 2 12 2 12C2 12 5 6 12 6C19 6 22 12 22 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                                 </svg>
                             </button>
                             <button class="btn-icon" onclick="editarProcesso('PROC-2024-001')">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path>
-                                    <polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M17 3L21 7L7 21H3V17L17 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M14 6L18 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                                 </svg>
                             </button>
                         </td>
@@ -376,78 +378,7 @@ function carregarProcessos() {
         </div>
     `;
 }
-// ==================== CONTEÚDO DE PRESTADORES ====================
-// function carregarPrestadores() {
-//     const conteudoPrincipal = document.querySelector('.main-content');
-//     conteudoPrincipal.innerHTML = `
-//         <div class="page-header">
-//             <h2>
-//                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-//                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-//                     <circle cx="12" cy="7" r="4"></circle>
-//                 </svg>
-//                 Gerenciar Prestadores
-//             </h2>
-//         </div>
 
-//         <div class="filtros-box">
-//             <div class="form-row">
-//                 <div class="form-group">
-//                     <label>Buscar</label>
-//                     <input type="text" placeholder="Buscar por nome, CNPJ ou email">
-//                 </div>
-//                 <div class="form-group">
-//                     <label>Status</label>
-//                     <select>
-//                         <option>Todos</option>
-//                         <option>Ativo</option>
-//                         <option>Inativo</option>
-//                     </select>
-//                 </div>
-//             </div>
-//         </div>
-
-//         <div class="tabela-container">
-//             <table class="data-table">
-//                 <thead>
-//                     <tr>
-//                         <th>Nome</th>
-//                         <th>CNPJ</th>
-//                         <th>Telefone</th>
-//                         <th>Email</th>
-//                         <th>Status</th>
-//                         <th>Processos</th>
-//                         <th>Ações</th>
-//                     </tr>
-//                 </thead>
-//                 <tbody>
-//                     <tr>
-//                         <td>Prestador A</td>
-//                         <td>12.345.678/0001-90</td>
-//                         <td>(11) 99999-9999</td>
-//                         <td>contato@prestadora.com</td>
-//                         <td><span class="badge entrada">Ativo</span></td>
-//                         <td>45</td>
-//                         <td>
-//                             <button class="btn-icon" onclick="verPrestador('1')">
-//                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-//                                     <circle cx="12" cy="12" r="3"></circle>
-//                                     <path d="M22 12c-2.667 4.667-6 7-10 7s-7.333-2.333-10-7c2.667-4.667 6-7 10-7s7.333 2.333 10 7z"></path>
-//                                 </svg>
-//                             </button>
-//                             <button class="btn-icon" onclick="editarPrestador('1')">
-//                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-//                                     <path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path>
-//                                     <polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon>
-//                                 </svg>
-//                             </button>
-//                         </td>
-//                     </tr>
-//                 </tbody>
-//             </table>
-//         </div>
-//     `;
-// }
 // ==================== CONTEÚDO DE PARTIÇÕES ====================
 function carregarParticoes() {
     const conteudoPrincipal = document.querySelector('.main-content');
@@ -496,6 +427,7 @@ function carregarParticoes() {
 
     gerarListaParticoes('1');
 }
+
 // ==================== CONTEÚDO DE HISTÓRICOS ====================
 function carregarHistoricos() {
     const conteudoPrincipal = document.querySelector('.main-content');
@@ -513,20 +445,16 @@ function carregarHistoricos() {
         <div class="filtros-box">
             <div class="form-row">
                 <div class="form-group">
-                    <label>Data/Hora Entrada</label>
-                    <input type="date" id="dataInicio"> <label>Data/Hora Saída</label> <input type="date" id="dataFim">
+                    <label>Data Início</label>
+                    <input type="date" id="dataInicio">
+                </div>
+                <div class="form-group">
+                    <label>Data Fim</label>
+                    <input type="date" id="dataFim">
                 </div>
                 <div class="form-group">
                     <label>Processo</label>
                     <input type="text" placeholder="Código do processo">
-                </div>
-                <div class="form-group">
-                    <label>Prestador</label>
-                    <select>
-                        <option>Todos</option>
-                        <option>Prestador A</option>
-                        <option>Prestador B</option>
-                    </select>
                 </div>
                 <div class="form-group">
                     <label>Tipo</label>
@@ -568,6 +496,7 @@ function carregarHistoricos() {
         </div>
     `;
 }
+
 // ==================== CONTEÚDO DE CONFIGURAÇÕES ====================
 function carregarConfiguracoes() {
     const conteudoPrincipal = document.querySelector('.main-content');
@@ -603,6 +532,7 @@ function carregarConfiguracoes() {
         </div>
     `;
 }
+
 // ==================== FUNÇÕES DAS PARTIÇÕES COM CORREDORES ====================
 function gerarParticoes(corredor) {
     const grid = document.getElementById('partitionsGrid');
@@ -634,6 +564,7 @@ function gerarParticoes(corredor) {
         grid.appendChild(particao);
     }
 }
+
 function gerarParticoesModal(corredor) {
     const grid = document.getElementById('modalPartitionsGrid');
     const indicador = document.getElementById('modalCorredorIndicator');
@@ -664,6 +595,7 @@ function gerarParticoesModal(corredor) {
         grid.appendChild(particao);
     }
 }
+
 function mudarCorredor(corredor, evento) {
     evento.preventDefault();
 
@@ -674,29 +606,30 @@ function mudarCorredor(corredor, evento) {
     corredorAtual = corredor;
     gerarParticoes(corredor);
 }
+
 function mudarCorredorModal(corredor, evento) {
     evento.preventDefault();
 
-    const botoes = document.querySelectorAll('.modal .corredor-btn');
+    const botoes = document.querySelectorAll('#partitionModal .corredor-btn');
     botoes.forEach(btn => btn.classList.remove('active'));
     evento.target.classList.add('active');
 
     corredorModalAtual = corredor;
     gerarParticoesModal(corredor);
 }
+
 function mudarCorredorParticoes(corredor, evento) {
     evento.preventDefault();
 
-    // Remover active de todos os botões corredor-btn na página
     document.querySelectorAll('.corredor-btn').forEach(btn => {
         btn.classList.remove('active');
     });
     
-    // Adicionar active no botão clicado
     evento.target.classList.add('active');
 
     gerarListaParticoes(corredor);
 }
+
 function gerarListaParticoes(corredor) {
     const lista = document.getElementById('particoesLista');
     if (!lista) return;
@@ -728,15 +661,17 @@ function gerarListaParticoes(corredor) {
             ${ocupado ? '<div class="particao-processo">PROC-2024-00' + Math.floor(Math.random() * 100) + '</div>' : ''}
             <div class="particao-acoes">
                 <button class="btn-icon" onclick="verParticao('${corredor}', ${i})">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="3"></circle>
-                        <path d="M22 12c-2.667 4.667-6 7-10 7s-7.333-2.333-10-7c2.667-4.667 6-7 10-7s7.333 2.333 10 7z"></path>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                        <path d="M22 12C22 12 19 18 12 18C5 18 2 12 2 12C2 12 5 6 12 6C19 6 22 12 22 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                     </svg>
                 </button>
                 <button class="btn-icon" onclick="historicoParticao('${corredor}', ${i})">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <polyline points="12 6 12 12 16 14"></polyline>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+                        <path d="M3 8H21M8 2V6M16 2V6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <circle cx="12" cy="15" r="2" fill="currentColor"/>
+                        <path d="M18 18L20 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                     </svg>
                 </button>
             </div>
@@ -744,25 +679,31 @@ function gerarListaParticoes(corredor) {
         lista.appendChild(card);
     }
 }
+
 // ==================== FUNÇÕES DE MODAL ====================
 function selecionarParticao(corredor, numero) {
     document.getElementById('locationInput').value = `C${corredor}-${numero}`;
     fecharModal();
 }
+
 function abrirModal() {
     document.getElementById('partitionModal').classList.add('active');
     gerarParticoesModal(corredorModalAtual);
 }
+
 function fecharModal() {
     document.getElementById('partitionModal').classList.remove('active');
 }
+
 function abrirModalConfiguracoes(tipo) {
     document.getElementById('settingsModal').classList.add('active');
     mudarAba(tipo === 'perfil' ? 'profile' : 'security');
 }
+
 function fecharModalConfiguracoes() {
     document.getElementById('settingsModal').classList.remove('active');
 }
+
 function mudarAba(aba) {
     abaAtual = aba;
     
@@ -773,29 +714,27 @@ function mudarAba(aba) {
     conteudos.forEach(conteudo => conteudo.classList.remove('active'));
     
     if (aba === 'profile') {
-        document.querySelectorAll('.tab-btn')[0].classList.add('active');
-        document.getElementById('profileTab').classList.add('active');
+        botoesAba[0]?.classList.add('active');
+        document.getElementById('profileTab')?.classList.add('active');
     } else {
-        document.querySelectorAll('.tab-btn')[1].classList.add('active');
-        document.getElementById('securityTab').classList.add('active');
+        botoesAba[1]?.classList.add('active');
+        document.getElementById('securityTab')?.classList.add('active');
     }
 }
+
 // ==================== FUNÇÕES DE NOTIFICAÇÃO ====================
 function mostrarNotificacao(mensagem, tipo = 'success') {
     const notificacao = document.createElement('div');
     notificacao.className = `notification ${tipo}`;
     
-    let icone = '';
-    if (tipo === 'success') {
-        icone = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>';
-    } else if (tipo === 'error') {
-        icone = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
-    } else {
-        icone = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="12" x2="12" y2="16"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>';
-    }
+    const icones = {
+        success: '✓',
+        error: '✗',
+        info: 'ℹ'
+    };
     
     notificacao.innerHTML = `
-        <i>${icone}</i>
+        <i>${icones[tipo] || 'ℹ'}</i>
         <span>${mensagem}</span>
     `;
     
@@ -803,19 +742,20 @@ function mostrarNotificacao(mensagem, tipo = 'success') {
     
     setTimeout(() => {
         notificacao.classList.add('fade-out');
-        setTimeout(() => {
-            notificacao.remove();
-        }, 300);
+        setTimeout(() => notificacao.remove(), 300);
     }, 3000);
 }
+
 // ==================== FUNÇÕES DE AVATAR ====================
 function uploadAvatar(evento) {
     const arquivo = evento.target.files[0];
     if (!arquivo) return;
+    
     if (!arquivo.type.startsWith('image/')) {
         mostrarNotificacao('Por favor, selecione uma imagem válida', 'error');
         return;
     }
+    
     if (arquivo.size > 2 * 1024 * 1024) {
         mostrarNotificacao('A imagem deve ter no máximo 2MB', 'error');
         return;
@@ -827,13 +767,13 @@ function uploadAvatar(evento) {
     reader.onload = function(e) {
         const avatar = document.querySelector('.profile-avatar');
         if (avatar) {
-            avatar.innerHTML = `<img src="${e.target.result}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
+            avatar.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`;
         }
     };
     reader.readAsDataURL(arquivo);
-    
     mostrarNotificacao('Foto atualizada com sucesso!', 'success');
 }
+
 function verificarForcaSenha(senha) {
     const barras = document.querySelectorAll('.strength-bar');
     let forca = 0;
@@ -852,31 +792,33 @@ function verificarForcaSenha(senha) {
         }
     });
 }
+
 // ==================== FUNÇÕES DE LOGOUT E MOVIMENTAÇÃO ====================
 function logout() {
     if (confirm('Tem certeza que deseja sair?')) {
         window.location.href = 'index.html';
     }
 }
+
 function registrarMovimentacao(evento) {
     evento.preventDefault();
 
     const dadosFormulario = {
-        qrCode: document.getElementById('qrCode').value,
-        tipoMovimento: document.getElementById('movementType').value,
-        localizacao: document.getElementById('locationInput').value,
-        quemColocou: document.getElementById('placedBy').value,
-        quemRetirou: document.getElementById('removedBy').value,
-        dataEntrada: document.getElementById('entryDate').value,
-        dataSaida: document.getElementById('exitDate').value
+        qrCode: document.getElementById('qrCode')?.value,
+        tipoMovimento: document.getElementById('movementType')?.value,
+        localizacao: document.getElementById('locationInput')?.value,
+        quemColocou: document.getElementById('placedBy')?.value,
+        quemRetirou: document.getElementById('removedBy')?.value,
+        dataEntrada: document.getElementById('entryDate')?.value,
+        dataSaida: document.getElementById('exitDate')?.value
     };
     
     if (!dadosFormulario.qrCode) {
-        alert('Por favor, insira o código QR');
+        mostrarNotificacao('Por favor, insira o código QR', 'error');
         return;
     }
     if (!dadosFormulario.localizacao) {
-        alert('Por favor, selecione uma localização');
+        mostrarNotificacao('Por favor, selecione uma localização', 'error');
         return;
     }
     
@@ -884,41 +826,46 @@ function registrarMovimentacao(evento) {
     mostrarNotificacao('Movimentação registrada com sucesso!');
     evento.target.reset();
 }
+
 function salvarConfiguracoes() {
     mostrarNotificacao('Configurações salvas com sucesso!');
     fecharModalConfiguracoes();
 }
+
 // ==================== FUNÇÕES PARA MODAIS ESPECÍFICOS ====================
 function verProcesso(id) {
     mostrarNotificacao('Visualizando processo ' + id, 'info');
 }
+
 function editarProcesso(id) {
     mostrarNotificacao('Editando processo ' + id, 'info');
 }
-function verPrestador(id) {
-    mostrarNotificacao('Visualizando prestador ' + id, 'info');
-}
-function editarPrestador(id) {
-    mostrarNotificacao('Editando prestador ' + id, 'info');
-}
+
 function verParticao(corredor, numero) {
     mostrarNotificacao(`Visualizando partição C${corredor}-${numero}`, 'info');
 }
+
 function historicoParticao(corredor, numero) {
     mostrarNotificacao(`Histórico da partição C${corredor}-${numero}`, 'info');
 }
+
+// ==================== INICIALIZAÇÃO ====================
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM carregado, inicializando...');
+
     const itensMenu = document.querySelectorAll('.menu-item');
     itensMenu.forEach(item => {
+        const texto = item.querySelector('span')?.textContent.toLowerCase();
+        
+        // IGNORAR o item "sair" - ele já tem onclick no HTML
+        if (texto === 'sair') {
+            return; // Pula este item
+        }
+        
         item.addEventListener('click', function(e) {
             e.preventDefault();
-            const texto = this.querySelector('span')?.textContent.toLowerCase();
             if (texto) {
-                if (texto === 'sair') {
-                    logout();
-                } else {
-                    carregarConteudo(texto);
-                }
+                carregarConteudo(texto);
             }
         });
     });
@@ -926,20 +873,20 @@ document.addEventListener('DOMContentLoaded', function() {
     gerarParticoes('1');
     gerarParticoesModal('1');
 
-    const inputLocalizacao = document.getElementById('locationInput');
-    if (inputLocalizacao) {
-        inputLocalizacao.addEventListener('click', abrirModal);
-    }
+    carregarDashboard();
+
     const inputAvatar = document.getElementById('avatarInput');
     if (inputAvatar) {
         inputAvatar.addEventListener('change', uploadAvatar);
     }
+    
     const novaSenha = document.getElementById('newPassword');
     if (novaSenha) {
         novaSenha.addEventListener('input', function() {
             verificarForcaSenha(this.value);
         });
     }
+    
     const formPerfil = document.getElementById('profileForm');
     if (formPerfil) {
         formPerfil.addEventListener('submit', function(e) {
@@ -947,14 +894,15 @@ document.addEventListener('DOMContentLoaded', function() {
             mostrarNotificacao('Perfil atualizado com sucesso!');
         });
     }
+    
     const formSenha = document.getElementById('passwordForm');
     if (formSenha) {
         formSenha.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const senhaAtual = document.getElementById('currentPassword').value;
-            const novaSenha = document.getElementById('newPassword').value;
-            const confirmarSenha = document.getElementById('confirmPassword').value;
+            const senhaAtual = document.getElementById('currentPassword')?.value;
+            const novaSenha = document.getElementById('newPassword')?.value;
+            const confirmarSenha = document.getElementById('confirmPassword')?.value;
             
             if (!senhaAtual) {
                 mostrarNotificacao('Por favor, informe a senha atual', 'error');
@@ -976,6 +924,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
 window.onclick = function(evento) {
     const modalParticao = document.getElementById('partitionModal');
     const modalConfig = document.getElementById('settingsModal');
@@ -988,3 +937,21 @@ window.onclick = function(evento) {
         fecharModalConfiguracoes();
     }
 };
+
+window.carregarConteudo = carregarConteudo;
+window.logout = logout;
+window.mudarCorredor = mudarCorredor;
+window.mudarCorredorModal = mudarCorredorModal;
+window.mudarCorredorParticoes = mudarCorredorParticoes;
+window.abrirModal = abrirModal;
+window.fecharModal = fecharModal;
+window.abrirModalConfiguracoes = abrirModalConfiguracoes;
+window.fecharModalConfiguracoes = fecharModalConfiguracoes;
+window.mudarAba = mudarAba;
+window.registrarMovimentacao = registrarMovimentacao;
+window.salvarConfiguracoes = salvarConfiguracoes;
+window.verProcesso = verProcesso;
+window.editarProcesso = editarProcesso;
+window.verParticao = verParticao;
+window.historicoParticao = historicoParticao;
+window.selecionarParticao = selecionarParticao;
